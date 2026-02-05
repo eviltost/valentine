@@ -23,25 +23,12 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.15);
       max-width: 500px;
       position: relative;
+      z-index: 10;
     }
-    h1 {
-      color: #e74c7c;
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
+    h1 { color: #e74c7c; font-size: 2.5rem; margin-bottom: 10px; }
     .heart-emoji { font-size: 3rem; margin-bottom: 20px; animation: pulse 1s infinite; }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-    }
-    .question {
-      font-size: 1.8rem;
-      color: #c0392b;
-      margin-bottom: 40px;
-      font-style: italic;
-    }
-    .buttons { position: relative; height: 120px; width: 100%; }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+    .question { font-size: 1.8rem; color: #c0392b; margin-bottom: 40px; font-style: italic; }
     .btn {
       padding: 15px 40px;
       font-size: 1.3rem;
@@ -50,26 +37,21 @@
       cursor: pointer;
       font-family: inherit;
       font-weight: bold;
-      transition: transform 0.1s, box-shadow 0.2s;
-      position: absolute;
     }
     .yes-btn {
       background: linear-gradient(45deg, #e74c7c, #ff6b9d);
       color: white;
       box-shadow: 0 8px 25px rgba(231,76,124,0.4);
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .yes-btn:hover { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 12px 35px rgba(231,76,124,0.5); }
+    .yes-btn:hover { transform: scale(1.1); box-shadow: 0 12px 35px rgba(231,76,124,0.5); }
     .no-btn {
+      position: fixed;
       background: linear-gradient(45deg, #bdc3c7, #95a5a6);
       color: white;
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      left: 75%;
-      top: 50%;
-      transform: translate(-50%, -50%);
+      z-index: 100;
+      transition: left 0.3s ease-out, top 0.3s ease-out;
     }
     .celebration {
       display: none;
@@ -81,22 +63,8 @@
     .celebration h2 { color: #e74c7c; font-size: 2.5rem; margin-bottom: 20px; }
     .celebration img { width: 280px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
     .celebration p { margin-top: 20px; font-size: 1.3rem; color: #c0392b; }
-    .floating-hearts {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      z-index: 0;
-    }
-    .floating-heart {
-      position: absolute;
-      font-size: 2rem;
-      animation: float 6s ease-in-out infinite;
-      opacity: 0.6;
-    }
+    .floating-hearts { position: fixed; width: 100%; height: 100%; pointer-events: none; top: 0; left: 0; overflow: hidden; z-index: 0; }
+    .floating-heart { position: absolute; font-size: 2rem; animation: float 6s ease-in-out infinite; opacity: 0.6; }
     @keyframes float {
       0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
       10% { opacity: 0.6; }
@@ -109,17 +77,15 @@
   <div class="floating-hearts" id="hearts"></div>
   <div class="container" id="card">
     <div class="heart-emoji">💕</div>
-    <h1>Hey Beautiful!</h1>
+    <h1>Henlo</h1>
     <p class="question">Will you be my Valentine?</p>
-    <div class="buttons" id="btnContainer">
-      <button class="btn yes-btn" id="yesBtn">YES 💖</button>
-      <button class="btn no-btn" id="noBtn">No</button>
-    </div>
+    <button class="btn yes-btn" id="yesBtn">YES 💖</button>
   </div>
+  <button class="btn no-btn" id="noBtn">No</button>
   <div class="container celebration" id="celebration">
-    <h2>Yay!! 🎉💕</h2>
+    <h2>KÍÎÌÏÎǏĨÍÏĨÍÏÎİĮÍ!!🎉💕</h2>
     <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="Cute cat with heart">
-    <p>I love you so much! 💖</p>
+    <p>mi luv💖</p>
   </div>
 
   <script>
@@ -127,11 +93,14 @@
     const yesBtn = document.getElementById('yesBtn');
     const card = document.getElementById('card');
     const celebration = document.getElementById('celebration');
-    const btnContainer = document.getElementById('btnContainer');
-
-    // Create floating hearts
     const heartsContainer = document.getElementById('hearts');
     const heartTypes = ['💕', '💖', '💗', '💓', '❤️', '💘'];
+
+    // Initialize No button position
+    noBtn.style.left = (window.innerWidth * 0.7) + 'px';
+    noBtn.style.top = (window.innerHeight * 0.5) + 'px';
+
+    // Create floating hearts
     for (let i = 0; i < 15; i++) {
       const heart = document.createElement('span');
       heart.className = 'floating-heart';
@@ -142,22 +111,42 @@
       heartsContainer.appendChild(heart);
     }
 
-    // No button runs away
-    noBtn.addEventListener('mouseover', (e) => {
-      const containerRect = btnContainer.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
-      let newX = Math.random() * (containerRect.width - btnRect.width);
-      let newY = Math.random() * (containerRect.height - btnRect.height);
+    // Check if two rectangles overlap
+    function rectsOverlap(r1, r2, padding = 20) {
+      return !(r1.right + padding < r2.left || r1.left - padding > r2.right || 
+               r1.bottom + padding < r2.top || r1.top - padding > r2.bottom);
+    }
+
+    // No button runs away smoothly
+    noBtn.addEventListener('mouseover', () => {
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      const padding = 50;
+      const yesRect = yesBtn.getBoundingClientRect();
+      
+      let newX, newY, attempts = 0;
+      
+      // Find a position that doesn't overlap with Yes button
+      do {
+        newX = padding + Math.random() * (window.innerWidth - btnWidth - padding * 2);
+        newY = padding + Math.random() * (window.innerHeight - btnHeight - padding * 2);
+        
+        const newRect = { left: newX, right: newX + btnWidth, top: newY, bottom: newY + btnHeight };
+        attempts++;
+        
+        if (!rectsOverlap(newRect, yesRect, 30) || attempts > 50) break;
+      } while (true);
+      
       noBtn.style.left = newX + 'px';
       noBtn.style.top = newY + 'px';
-      noBtn.style.transform = 'none';
     });
 
     // Yes button celebration
     yesBtn.addEventListener('click', () => {
       card.style.display = 'none';
+      noBtn.style.display = 'none';
       celebration.style.display = 'flex';
-      // Add extra hearts
+      
       for (let i = 0; i < 20; i++) {
         setTimeout(() => {
           const heart = document.createElement('span');
