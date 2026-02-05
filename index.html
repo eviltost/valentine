@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>💕 A Special Question 💕</title>
+  <title>💕 tost quiz 💕</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -65,6 +65,17 @@
     .celebration p { margin-top: 20px; font-size: 1.3rem; color: #c0392b; }
     .floating-hearts { position: fixed; width: 100%; height: 100%; pointer-events: none; top: 0; left: 0; overflow: hidden; z-index: 0; }
     .floating-heart { position: absolute; font-size: 2rem; animation: float 6s ease-in-out infinite; opacity: 0.6; }
+    .floating-photo {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      animation: float 8s ease-in-out infinite;
+      opacity: 0.85;
+      border: 2px solid white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
     @keyframes float {
       0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
       10% { opacity: 0.6; }
@@ -77,15 +88,15 @@
   <div class="floating-hearts" id="hearts"></div>
   <div class="container" id="card">
     <div class="heart-emoji">💕</div>
-    <h1>Henlo</h1>
+    <h1>henlo</h1>
     <p class="question">Will you be my Valentine?</p>
     <button class="btn yes-btn" id="yesBtn">YES 💖</button>
   </div>
   <button class="btn no-btn" id="noBtn">No</button>
   <div class="container celebration" id="celebration">
-    <h2>KÍÎÌÏÎǏĨÍÏĨÍÏÎİĮÍ!!🎉💕</h2>
+    <h2>KÎĮÎĨÍĪİÎİ!! 🎉💕</h2>
     <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="Cute cat with heart">
-    <p>mi luv💖</p>
+    <p>mi luv 💖</p>
   </div>
 
   <script>
@@ -100,6 +111,15 @@
     noBtn.style.left = (window.innerWidth * 0.7) + 'px';
     noBtn.style.top = (window.innerHeight * 0.5) + 'px';
 
+    // REPLACE THESE WITH YOUR PHOTO FILENAMES
+    const photos = [
+      'cat.png',
+      'cat2.png',
+      'cat3.png',
+      'toast.png',
+      'squid.png'
+    ];
+
     // Create floating hearts
     for (let i = 0; i < 15; i++) {
       const heart = document.createElement('span');
@@ -109,6 +129,17 @@
       heart.style.animationDelay = Math.random() * 6 + 's';
       heart.style.animationDuration = (5 + Math.random() * 4) + 's';
       heartsContainer.appendChild(heart);
+    }
+
+    // Create floating photos (each photo appears twice, staggered)
+    for (let i = 0; i < 8; i++) {
+      const photo = document.createElement('img');
+      photo.className = 'floating-photo';
+      photo.src = photos[i % 4];
+      photo.style.left = Math.random() * 90 + 5 + 'vw';
+      photo.style.animationDelay = (i * 3 + Math.random() * 2) + 's';
+      photo.style.animationDuration = (7 + Math.random() * 4) + 's';
+      heartsContainer.appendChild(photo);
     }
 
     // Check if two rectangles overlap
