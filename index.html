@@ -111,7 +111,7 @@
     noBtn.style.left = (window.innerWidth * 0.7) + 'px';
     noBtn.style.top = (window.innerHeight * 0.5) + 'px';
 
-    // REPLACE THESE WITH YOUR PHOTO FILENAMES
+    // Your photos
     const photos = [
       'cat.png',
       'cat2.png',
@@ -132,10 +132,10 @@
     }
 
     // Create floating photos (each photo appears twice, staggered)
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
       const photo = document.createElement('img');
       photo.className = 'floating-photo';
-      photo.src = photos[i % 4];
+      photo.src = photos[i % photos.length];
       photo.style.left = Math.random() * 90 + 5 + 'vw';
       photo.style.animationDelay = (i * 3 + Math.random() * 2) + 's';
       photo.style.animationDuration = (7 + Math.random() * 4) + 's';
